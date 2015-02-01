@@ -11,6 +11,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
 		<felix.version>2.3.7</felix.version>
 		<maven.builder.helper.version>1.5</maven.builder.helper.version>
 		<slf4j.version>1.6.6</slf4j.version>
