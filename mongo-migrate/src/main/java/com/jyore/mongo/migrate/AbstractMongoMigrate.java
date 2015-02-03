@@ -46,7 +46,7 @@ public abstract class AbstractMongoMigrate {
 		Integer lastVersion = -1;
 		DBCursor cur = migrations.find().sort(MongoMigrateSchemaUtil.generateMaxVersionSort()).limit(1);
 		if(cur.hasNext()) {
-			lastVersion = ((Double)cur.next().get("version")).intValue();
+			lastVersion = (Integer)cur.next().get("version");
 		}
 		
 		for(Resource resource : locations.getResources()) {
@@ -72,10 +72,10 @@ public abstract class AbstractMongoMigrate {
 			
 			try {
 				MongoEvalHelper.eval(userdb, resource.load("UTF-8"));
-				migrations.insert(MongoMigrateSchemaUtil.generateSchemaEntry(version, fn, true));
+				migrations.insert(MongoMigrateSchemaUtil.generateSchemaEntry(version, fn, name, true));
 				log.info("Successfully applied migration {}", name);
 			} catch(MongoMigrateExecuteException | IOException e) {
-				migrations.insert(MongoMigrateSchemaUtil.generateSchemaEntry(version, fn, false));
+				migrations.insert(MongoMigrateSchemaUtil.generateSchemaEntry(version, fn, name, false));
 				log.error("Failed to apply migration " + name,e);
 				throw new MongoMigrateExecuteException("Failed to apply migration",e);
 			}

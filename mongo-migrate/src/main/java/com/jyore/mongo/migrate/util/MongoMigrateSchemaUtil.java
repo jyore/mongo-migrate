@@ -4,8 +4,8 @@ import com.mongodb.BasicDBObject;
 
 public class MongoMigrateSchemaUtil {
 
-	public static BasicDBObject generateSchemaEntry(Integer version, String name, Boolean success) {
-		return new BasicDBObject("version",version).append("name",name).append("success",success);
+	public static BasicDBObject generateSchemaEntry(Integer version, String name, String fullName, Boolean success) {
+		return new BasicDBObject("version",version).append("name",name).append("fullName",fullName).append("success",success);
 	}
 
 	public static BasicDBObject generateMaxVersionSort() {
