@@ -4,9 +4,15 @@ import com.mongodb.BasicDBObject;
 
 public class MongoMigrateSchemaUtil {
 
-	public static BasicDBObject generateSchemaEntry(String version, String name, Boolean success) {
+	public static BasicDBObject generateSchemaEntry(Integer version, String name, Boolean success) {
 		return new BasicDBObject("version",version).append("name",name).append("success",success);
 	}
-	
 
+	public static BasicDBObject generateMaxVersionSort() {
+		return new BasicDBObject("version",-1);
+	}
+	
+	public static BasicDBObject generateSchemaCheckEntry(Integer version) {
+		return new BasicDBObject("version",new BasicDBObject("$gte",version));
+	}
 }
