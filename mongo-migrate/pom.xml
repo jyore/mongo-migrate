@@ -26,7 +26,6 @@
 		<dependency>
 			<groupId>org.jboss.shrinkwrap.vfs3</groupId>
 			<artifactId>shrinkwrap-vfs3</artifactId>
-			<version>1.0.0-cr-1</version>
 			<scope>provided</scope>
 		</dependency>
  	</dependencies>

@@ -31,7 +31,7 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifact>maven-plugin-plugin</artifact>
+				<artifactId>maven-plugin-plugin</artifactId>
 				<version>3.4</version>
 				<executions>
 					<execution>
