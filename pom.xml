@@ -21,6 +21,7 @@
 
 	<modules>
 		<module>mongo-migrate</module>
+		<module>mongo-migrate-maven-plugin</module>
 		<module>mongo-migrate-test</module>
 	</modules>
  	
