@@ -10,7 +10,7 @@ import com.jyore.mongo.migrate.exception.MongoMigrateExecuteException;
 import com.jyore.resource.exception.ResourceLoadException;
 
 @Mojo(name = "migrate")
-public class MograteMongoMigrateMojo extends AbstractMongoMigrateMojo {
+public class MigrateMongoMigrateMojo extends AbstractMongoMigrateMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {

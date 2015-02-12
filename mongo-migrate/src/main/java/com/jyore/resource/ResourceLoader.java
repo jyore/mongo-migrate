@@ -20,7 +20,11 @@ public class ResourceLoader {
 		for(String location : locations) {
 			log.info("Loading files from location: " + location);
 			URL url = Thread.currentThread().getContextClassLoader().getResource(location);
-			resources.addAll(Scanner.findResources(location,url));
+			if(url != null) {
+				resources.addAll(Scanner.findResources(location,url));
+			} else {
+				resources.addAll(Scanner.findResources(location));
+			}
 		}
 		
 		return resources;

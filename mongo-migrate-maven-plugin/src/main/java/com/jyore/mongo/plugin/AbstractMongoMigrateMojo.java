@@ -23,4 +23,7 @@ public abstract class AbstractMongoMigrateMojo extends AbstractMojo {
 	
 	@Parameter(required=true)
 	protected String[] locations;
+	
+	@Parameter(required=false)
+	protected String[] noCleanDbs;
 }

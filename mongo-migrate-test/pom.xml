@@ -22,8 +22,11 @@
 				<artifactId>mongo-migrate-maven-plugin</artifactId>
 				<configuration>
 					<locations>
-						<location>/mongo/scripts</location>
+						<location>${basedir}/src/main/resources/mongo/scripts</location>
 					</locations>
+					<noCleanDbs>
+						<noCleanDb>admin</noCleanDb>
+					</noCleanDbs>
 				</configuration>
 			</plugin>
 		</plugins>

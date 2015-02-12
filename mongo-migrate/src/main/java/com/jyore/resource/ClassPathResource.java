@@ -19,7 +19,7 @@ public class ClassPathResource implements Resource, Comparable<Resource> {
 	public String load(String encoding) throws IOException {
 		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(location);
 		if(is == null) {
-			throw new IOException("Could not load resource");
+			throw new IOException("Could not load resource: " + location);
 		}
 		
 		Reader reader = new InputStreamReader(is,Charset.forName(encoding));

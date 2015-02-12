@@ -1,40 +1,36 @@
 package com.jyore.resource.scan;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 
+import com.jyore.resource.FilePathResource;
 import com.jyore.resource.Resource;
 
 public class FileLocationScanner implements LocationScanner {
 
-	public Collection<Resource> findResources(String location, URL url) {
-		return null;
-		/*
-		 LOG.debug("Scanning for filesystem resources at '" + path + "' (Prefix: '" + prefix + "', Suffix: '" + suffix + "')");
+	public Collection<Resource> findResources(String location, URL url) throws IOException {
+		return loadFiles(new File(location));
+	}
 
-        if (!new File(path).isDirectory()) {
-            throw new FlywayException("Invalid filesystem path: " + path);
-        }
-
-        Set<Resource> resources = new TreeSet<Resource>();
-
-        Set<String> resourceNames = findResourceNames(path, prefix, suffix);
-        for (String resourceName : resourceNames) {
-            resources.add(new FileSystemResource(resourceName));
-            LOG.debug("Found filesystem resource: " + resourceName);
-        }
-
-        return resources.toArray(new Resource[resources.size()]);
-		 */
-		/*
-		if(!new File(location).isDirectory()) {
-			//exception
+	private Collection<Resource> loadFiles(File directory) throws IOException {
+		Set<Resource> resources = new TreeSet<Resource>();
+		if(!directory.isDirectory()) {
+			throw new IOException("Location is not a directory " + directory.getName());
 		}
 		
-		Set<Resource> resources = new TreeSet<Resource>();
+		for(File file : directory.listFiles()) {
+			if(file.isDirectory()) {
+				resources.addAll(loadFiles(file));
+			} else {
+				resources.add(new FilePathResource(file));
+			}
+		}
 		
-		
-		return resources;*/
+		return resources;
 	}
 
 }
