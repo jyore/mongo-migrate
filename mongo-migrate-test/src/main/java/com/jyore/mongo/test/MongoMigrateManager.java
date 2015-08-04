@@ -2,17 +2,18 @@ package com.jyore.mongo.test;
 
 import com.jyore.mongo.migrate.MongoMigrate;
 import com.jyore.mongo.migrate.exception.MongoMigrateConfigurationException;
+import com.jyore.mongo.migrate.exception.MongoMigrateConnectionException;
 import com.jyore.mongo.migrate.exception.MongoMigrateExecuteException;
 import com.jyore.resource.exception.ResourceLoadException;
 
 public class MongoMigrateManager {
 
 
-	public void doMigrate() {
+	public void doMigrate() throws MongoMigrateConnectionException {
 		try {
 			new MongoMigrate()
 				.configure()
-					.connection("localhost", "27017")
+					.connection("mongodb://localhost:27017/admin")
 					.locations("/mongo/scripts")
 				.migrate()
 			;

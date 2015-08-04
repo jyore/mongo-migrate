@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.jyore.mongo.migrate.config.ConnectionConfig;
 import com.jyore.mongo.migrate.config.DirectoryConfig;
 import com.jyore.mongo.migrate.exception.MongoMigrateConfigurationException;
+import com.jyore.mongo.migrate.exception.MongoMigrateConnectionException;
 import com.jyore.mongo.migrate.exception.MongoMigrateExecuteException;
 import com.jyore.mongo.migrate.util.MongoEvalHelper;
 import com.jyore.mongo.migrate.util.MongoMigrateSchemaUtil;
@@ -37,7 +38,7 @@ public abstract class AbstractMongoMigrate {
 		return new Configuration(this);
 	}
 	
-	public void migrate() throws MongoMigrateConfigurationException,MongoMigrateExecuteException, ResourceLoadException {
+	public void migrate() throws MongoMigrateConfigurationException,MongoMigrateExecuteException, ResourceLoadException, MongoMigrateConnectionException {
 		DB schemadb = schema.getConnection();
 		DBCollection migrations = schemadb.getCollection(MONGO_MIGRATE_HISTORY);
 		
@@ -90,8 +91,8 @@ public abstract class AbstractMongoMigrate {
 			this.parent = parent;
 		}
 		
-		public Connection connection(String host, String port) {
-			return new Connection(this,host,port);
+		public Connection connection(String connectionUri) {
+			return new Connection(this,connectionUri);
 		}
 		
 		public Locations locations(String ... locations) {
@@ -99,7 +100,7 @@ public abstract class AbstractMongoMigrate {
 		}
 		
 		//Parent methods to support easier fluid api
-		public void migrate() throws MongoMigrateConfigurationException, MongoMigrateExecuteException, ResourceLoadException {
+		public void migrate() throws MongoMigrateConfigurationException, MongoMigrateExecuteException, ResourceLoadException, MongoMigrateConnectionException {
 			parent.migrate();
 		}
 	}
@@ -107,26 +108,14 @@ public abstract class AbstractMongoMigrate {
 	public static class Connection {
 		private final Configuration parent;
 		
-		public Connection(Configuration parent, String host, String port) {
+		public Connection(Configuration parent, String connectionString) {
 			this.parent = parent;
-			this.parent.parent.schema = new ConnectionConfig(host,port).dbDefault(MONGO_MIGRATE_DB);
-			this.parent.parent.user = new ConnectionConfig(host,port);
+			this.parent.parent.schema = new ConnectionConfig(connectionString).dbName(MONGO_MIGRATE_DB);
+			this.parent.parent.user = new ConnectionConfig(connectionString);
 		}
 		
-		public Connection dbDefault(String dbDefault) {
-			parent.parent.user.dbDefault(dbDefault);
-			return this;
-		}
-		
-		public Connection username(String username) {
-			parent.parent.schema.username(username);
-			parent.parent.user.username(username);
-			return this;
-		}
-		
-		public Connection password(String password) {
-			parent.parent.schema.password(password);
-			parent.parent.user.password(password);
+		public Connection dbName(String dbName) {
+			parent.parent.user.dbName(dbName);
 			return this;
 		}
 		
@@ -135,7 +124,7 @@ public abstract class AbstractMongoMigrate {
 			return this.parent.locations(locations);
 		}
 		
-		public void migrate() throws MongoMigrateConfigurationException, MongoMigrateExecuteException, ResourceLoadException {
+		public void migrate() throws MongoMigrateConfigurationException, MongoMigrateExecuteException, ResourceLoadException, MongoMigrateConnectionException {
 			parent.migrate();
 		}
 	}
@@ -149,11 +138,11 @@ public abstract class AbstractMongoMigrate {
 		}
 		
 		//Parent methods to support easier fluid api
-		public Connection connection(String host, String port) {
-			return this.parent.connection(host, port);
+		public Connection connection(String connectionUri) {
+			return this.parent.connection(connectionUri);
 		}
 		
-		public void migrate() throws MongoMigrateConfigurationException, MongoMigrateExecuteException, ResourceLoadException {
+		public void migrate() throws MongoMigrateConfigurationException, MongoMigrateExecuteException, ResourceLoadException, MongoMigrateConnectionException {
 			parent.migrate();
 		}
 	}

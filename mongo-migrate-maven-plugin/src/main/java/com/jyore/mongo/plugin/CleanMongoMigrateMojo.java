@@ -4,9 +4,10 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 
+import com.jyore.mongo.migrate.config.ConnectionConfig;
+import com.jyore.mongo.migrate.exception.MongoMigrateConfigurationException;
 import com.jyore.mongo.migrate.exception.MongoMigrateConnectionException;
 import com.jyore.mongo.migrate.exception.MongoMigrateExecuteException;
-import com.jyore.mongo.migrate.util.MongoConnectionHelper;
 import com.jyore.mongo.migrate.util.MongoEvalHelper;
 import com.mongodb.DB;
 
@@ -16,14 +17,8 @@ public class CleanMongoMigrateMojo extends AbstractMongoMigrateMojo {
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		try {
-			DB db;
 			
-			if(username != null && password != null) {
-				db = MongoConnectionHelper.getConnection(host, port, username, password, dbDefault);
-			} else {
-				db = MongoConnectionHelper.getConnection(host, port, dbDefault);
-			}
-			
+			DB db = new ConnectionConfig(connectionString).dbName(dbName).getConnection();
 			
 			StringBuilder sb = new StringBuilder("var dbs=db.getMongo().getDBNames();for(var i in dbs){db=db.getMongo().getDB(dbs[i]);");
 			if(noCleanDbs != null && noCleanDbs.length > 0) {
@@ -43,7 +38,7 @@ public class CleanMongoMigrateMojo extends AbstractMongoMigrateMojo {
 			
 			MongoEvalHelper.eval(db, sb.toString());
 			
-		} catch(MongoMigrateConnectionException | MongoMigrateExecuteException e) {
+		} catch(MongoMigrateConnectionException | MongoMigrateExecuteException | MongoMigrateConfigurationException e) {
 			throw new MojoExecutionException("Unable to execute clean",e);
 		}
 	}

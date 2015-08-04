@@ -6,6 +6,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 
 import com.jyore.mongo.migrate.MongoMigrate;
 import com.jyore.mongo.migrate.exception.MongoMigrateConfigurationException;
+import com.jyore.mongo.migrate.exception.MongoMigrateConnectionException;
 import com.jyore.mongo.migrate.exception.MongoMigrateExecuteException;
 import com.jyore.resource.exception.ResourceLoadException;
 
@@ -18,14 +19,12 @@ public class MigrateMongoMigrateMojo extends AbstractMongoMigrateMojo {
 		try {
 			new MongoMigrate()
 				.configure()
-					.connection(host, port)
-						.dbDefault(dbDefault)
-						.username(username)
-						.password(password)
+					.connection(connectionString)
+						.dbName(dbName)
 					.locations(locations)
 				.migrate()
 			;
-		} catch (MongoMigrateConfigurationException | MongoMigrateExecuteException | ResourceLoadException e) {
+		} catch (MongoMigrateConfigurationException | MongoMigrateExecuteException | ResourceLoadException | MongoMigrateConnectionException e) {
 			throw new MojoExecutionException("Failed to migrate: ",e);
 		}
 	}

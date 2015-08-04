@@ -5,13 +5,15 @@
 >
 
 	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.jyore.mongo</groupId>
 	<artifactId>mongo-migrate-test</artifactId>
+	<version>0.2.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<parent>
 		<groupId>com.jyore.mongo</groupId>
 		<artifactId>mongo-migrate-parent</artifactId>
-		<version>0.1.0-SNAPSHOT</version>
+		<version>0.2.0-SNAPSHOT</version>
 	</parent>
  	
  	
@@ -35,7 +37,7 @@
 		<dependency>
 			<groupId>com.jyore.mongo</groupId>
 			<artifactId>mongo-migrate</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
